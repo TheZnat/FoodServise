@@ -1,0 +1,13 @@
+:root {
+  --font: "Open Sans", sans-serif;
+  --primary-color: rgb(254, 114, 76);
+  --primary-hover-color: rgb(226, 93, 56);
+  --text-secondary-color: rgb(158, 161, 177);
+  --white-color: #ffff;
+  --text-color: #000;
+  --separator-color: rgb(212, 214, 224);
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
