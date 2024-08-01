@@ -1,13 +1,14 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { createBrowserRouter, defer, RouterProvider } from "react-router-dom";
 import ReactDOM from "react-dom/client";
-// import App from "./App.tsx";
 import "./index.css";
 import Layout from "./Layout/Menu/Layout";
-import Menu from "./pages/Menu/Menu";
 import Cart from "./pages/Cart/Cart";
-import Error from "./pages/Error/Error";
+import ErrorPage from "./pages/Error/Error";
 import Product from "./pages/Product/Product";
+import axios from "axios";
+import { PREFIX } from "./helpers/API";
+const Menu = lazy(() => import("./pages/Menu/Menu"));
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Menu />,
+        element: (
+          <Suspense fallback={<>Загрузка...</>}>
+            <Menu />
+          </Suspense>
+        ),
       },
       {
         path: "/cart",
@@ -25,18 +30,23 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+        errorElement: <>Ошибка</>,
+        loader: async ({ params }) => {
+          return defer({
+            data: await axios.get(`${PREFIX}/products/${params.id}`).then(data => data)
+          });
+        },
       },
     ],
   },
   {
     path: "*",
-    element: <Error />,
+    element: <ErrorPage />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* <App /> */}
     <RouterProvider router={router} />
   </React.StrictMode>
 );
