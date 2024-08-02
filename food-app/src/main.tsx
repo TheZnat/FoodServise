@@ -8,6 +8,9 @@ import ErrorPage from "./pages/Error/Error";
 import Product from "./pages/Product/Product";
 import axios from "axios";
 import { PREFIX } from "./helpers/API";
+import AuthLayout from "./Layout/Auth/AuthLayout";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 const Menu = lazy(() => import("./pages/Menu/Menu"));
 
 const router = createBrowserRouter([
@@ -38,6 +41,20 @@ const router = createBrowserRouter([
         },
       },
     ],
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout/>,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: 'register',
+        element: <Register />,
+      }
+    ]
   },
   {
     path: "*",
