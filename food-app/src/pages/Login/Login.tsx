@@ -12,17 +12,22 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.login} onSubmit={submit}>
+    <div className={styles.login}>
       <Headling>Вход</Headling>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={submit}>
         <div className={styles.field}>
           <label htmlFor="email">Ваш Email</label>
-          <Input id="email" placeholder="Email" />
+          <Input id="email" name="email" placeholder="Email" />
         </div>
 
         <div className={styles.field}>
           <label htmlFor="password">Ваш пароль</label>
-          <Input id="password" type="password" placeholder="Пароль" />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Пароль"
+          />
         </div>
         <Button appearance="big">Вход</Button>
       </form>
