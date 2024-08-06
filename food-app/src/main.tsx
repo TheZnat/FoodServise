@@ -11,6 +11,9 @@ import { PREFIX } from "./helpers/API";
 import AuthLayout from "./Layout/Auth/AuthLayout";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import RequireAuth from "./helpers/RequireAuth";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 const Menu = lazy(() => import("./pages/Menu/Menu"));
 
 const router = createBrowserRouter([
@@ -32,29 +35,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/product/:id",
-        element: <Product />,
+        element: (
+          <RequireAuth>
+            <Product />
+          </RequireAuth>
+        ),
         errorElement: <>Ошибка</>,
         loader: async ({ params }) => {
           return defer({
-            data: await axios.get(`${PREFIX}/products/${params.id}`).then(data => data)
+            data: await axios
+              .get(`${PREFIX}/products/${params.id}`)
+              .then((data) => data),
           });
         },
       },
     ],
   },
   {
-    path: '/auth',
-    element: <AuthLayout/>,
+    path: "/auth",
+    element: <AuthLayout />,
     children: [
       {
         path: "login",
         element: <Login />,
       },
       {
-        path: 'register',
+        path: "register",
         element: <Register />,
-      }
-    ]
+      },
+    ],
   },
   {
     path: "*",
@@ -64,6 +73,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

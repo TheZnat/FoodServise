@@ -1,9 +1,20 @@
-import { Link, Outlet, NavLink } from "react-router-dom";
+import { Link, Outlet, NavLink, useNavigate } from "react-router-dom";
 import styles from "./layout.module.css";
 import Button from "../../components/Button/Button";
 import cn from "classnames";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { userAction } from "../../store/user.slice";
 
 const layout = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
+
+  const logout = () => {
+    dispatch(userAction.logout())
+    navigate("/auth/login");
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles.sidebar}>
@@ -36,7 +47,7 @@ const layout = () => {
             Корзина
           </NavLink>
         </div>
-        <Button className={styles.exit}>
+        <Button className={styles.exit} onClick={logout}>
           <img src="/icon/exit.png" alt="выход" />
           Выход
         </Button>
