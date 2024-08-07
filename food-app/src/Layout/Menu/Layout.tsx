@@ -1,27 +1,33 @@
-import { Link, Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import styles from "./layout.module.css";
 import Button from "../../components/Button/Button";
 import cn from "classnames";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../store/store";
-import { userAction } from "../../store/user.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
+import { getProfile, userAction } from "../../store/user.slice";
+import { useEffect } from "react";
 
 const layout = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
+  const pofile = useSelector((s: RootState) => s.user.profile);
 
   const logout = () => {
-    dispatch(userAction.logout())
+    dispatch(userAction.logout());
     navigate("/auth/login");
   };
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, [dispatch]);
 
   return (
     <div className={styles.layout}>
       <div className={styles.sidebar}>
         <div className={styles.user}>
           <img src="/avatar.svg" className={styles.avatar} alt="Аватар" />
-          <div className={styles.name}>Кузинов Максим</div>
-          <div className={styles.email}>VseZnal@gamil.com</div>
+          <div className={styles.name}>{pofile?.name}</div>
+          <div className={styles.email}>{pofile?.email}</div>
         </div>
         <div className={styles.menu}>
           <NavLink
